@@ -25,3 +25,6 @@ jobs:
 
       - name: Run Pre-Commit
         run: poetry run pre-commit run --all-files --verbose
+
+      - name: Run PyTest
+        run: poetry run pytest . --verbose
