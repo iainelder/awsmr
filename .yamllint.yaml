@@ -1,0 +1,7 @@
+---
+extends: default
+
+rules:
+  # To suppress a warning from Github Action's "on" syntax for workflow
+  # triggers.
+  truthy: disable
