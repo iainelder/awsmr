@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "awsmr"
+version = "0.1.0"
+description = ""
+authors = ["Iain Samuel McLean Elder <iain@isme.es>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+# I'd love to use v2, but it's purposefully not available as a package. Sad.
+# https://github.com/aws/aws-cli/issues/4947
+# awscli = {git = "https://github.com/aws/aws-cli/", rev = "v2"}
+awscli = "^1.22.41"
+boto3 = "^1.20.41"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+black = "^21.12b0"
+
+[tool.poetry.scripts]
+awsmr = "awsmr:main"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
