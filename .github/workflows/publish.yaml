@@ -1,0 +1,29 @@
+---
+name: Test
+
+on: [workflow_dispatch]
+
+jobs:
+  publish-to-pypi:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Check out
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Setup Poetry
+        run: pip install poetry
+
+      # FIXME: try without the dashes?
+      # They wrote "testpypi" in this article
+      # https://towardsdatascience.com/packages-part-2-how-to-publish-test-your-package-on-pypi-with-poetry-9fc7295df1a5
+      - name: Publish package to Pypi
+        run: |
+            poetry config pypi-token.pypi "${{ secrets.pypi_api_key }}"
+            poetry publish --repository pypi --build --no-interaction
