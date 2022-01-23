@@ -2,9 +2,13 @@ import sys
 
 import awscli.clidriver
 from awscli.clidriver import CLIDriver, CLIOperationCaller
-from awscli.formatter import (FullyBufferedFormatter, JSONFormatter,
-                              TableFormatter, TextFormatter,
-                              is_response_paginated)
+from awscli.formatter import (
+    FullyBufferedFormatter,
+    JSONFormatter,
+    TableFormatter,
+    TextFormatter,
+    is_response_paginated,
+)
 from botocore.compat import OrderedDict
 
 from multiregion import multiregion, response_or_exception
