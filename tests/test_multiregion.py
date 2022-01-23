@@ -80,4 +80,6 @@ def test_format_exception():
     def fail():
         raise ServiceError("toybox on fire")
 
-    assert response_or_exception(fail) == {"Exception": repr(Exception("toybox on fire"))}
+    assert response_or_exception(fail) == {
+        "Exception": repr(ServiceError("toybox on fire"))
+    }
