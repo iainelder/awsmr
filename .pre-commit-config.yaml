@@ -14,8 +14,13 @@ repos:
         types: [python]
         language: system
 
+      # Black profile is set here because I can't make
+      # the .isort.cfg file work.
+      # Problem and workaround described here.
+      # https://github.com/PyCQA/isort/issues/1518
       - id: isort
         name: isort
-        entry: poetry run isort --diff
+        entry: poetry run isort
+        args: [--check, --diff, --profile, black]
         types: [python]
         language: system
