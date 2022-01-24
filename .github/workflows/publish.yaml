@@ -26,4 +26,4 @@ jobs:
       - name: Publish package to Pypi
         run: |
             poetry config pypi-token.pypi "${{ secrets.pypi_api_key }}"
-            poetry publish --repository pypi --build --no-interaction
+            poetry publish --build --no-interaction
