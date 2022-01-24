@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "awsmr"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Iain Samuel McLean Elder <iain@isme.es>"]
 
