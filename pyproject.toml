@@ -18,6 +18,11 @@ pytest = "^6.2.5"
 black = "^21.12b0"
 isort = "^5.10.1"
 pre-commit = "^2.17.0"
+ipython = "^8.2.0"
+httpretty = "^1.1.4"
+more-itertools = "^8.12.0"
+mypy = "^0.942"
+requests = "^2.27.1"
 
 [tool.poetry.scripts]
 awsmr = "awsmr:main"
