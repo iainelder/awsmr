@@ -22,5 +22,11 @@ jobs:
         with:
           python-version: 3.7
 
+      - name: Setup Poetry
+        run: pip install poetry
+
+      - name: Install development virtualenv
+        run: poetry install --no-interaction --verbose
+
       - name: Fetch AWS CLI latest release version
         run: python get_latest_release.py
