@@ -17,10 +17,10 @@ jobs:
         with:
           token: ${{ secrets.REPO_SCOPED_TOKEN }}
 
-      - name: Set up Python 3.7
+      - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: Setup Poetry
         run: pip install poetry
@@ -30,3 +30,18 @@ jobs:
 
       - name: Fetch AWS CLI latest release version
         run: poetry run python get_latest_release.py
+
+      - name: Check for modified files
+        id: git-check
+        run: |
+          output=$(git status --porcelain -- aws_cli_release)
+          modified=$([ -z $output ] && echo "true" || echo "false")
+          echo ::set-output name=modified::$modified
+
+      - name:
+        if: steps.git-check.outputs.modified == 'true'
+        run: |
+          git config --global user.name "awsmr repo writer"
+          git config --global user.email "awsmr@github.com"
+          git commit -m "New release version"
+          git push
