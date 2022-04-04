@@ -1,29 +1,28 @@
 ---
-name: Publish to PyPI
+name: Publish
 
-on: [workflow_dispatch]
+on:  # yamllint disable-line rule:truthy
+  release:
+    types:
+      - published
 
 jobs:
-  publish-to-pypi:
+  publish:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Check out
         uses: actions/checkout@v2
 
-      - name: Set up Python 3.7
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.8
 
-      - name: Setup Poetry
+      - name: Install Poetry
         run: pip install poetry
 
-      # FIXME: try without the dashes?
-      # They wrote "testpypi" in this article
-      # https://towardsdatascience.com/packages-part-2-how-to-publish-test-your-package-on-pypi-with-poetry-9fc7295df1a5
-      - name: Publish package to Pypi
+      - name: Build and publish package
         run: |
-            poetry config pypi-token.pypi "${{ secrets.pypi_api_key }}"
-            poetry publish --build --no-interaction
+          poetry config pypi-token.pypi "${{ secrets.pypi_password }}"
+          poetry publish --no-interaction --build
