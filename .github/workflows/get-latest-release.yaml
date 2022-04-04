@@ -4,8 +4,9 @@ name: Save AWS CLI latest release version
 # https://stackoverflow.com/questions/58465057/trigger-a-github-action-when-another-repository-creates-a-new-release
 
 on:
-  schedule:
-    - cron: '17 10 * * *'
+  - schedule:
+      - cron: '17 10 * * *'
+  - workflow_dispatch
 
 jobs:
   get-aws-cli-release-version:
