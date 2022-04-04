@@ -1,9 +1,13 @@
+from pathlib import Path
+
 import requests
 from more_itertools import tail
 
 
 def main() -> None:
-    print(get_latest_release())
+    latest_release = get_latest_release()
+    write_latest_release(latest_release)
+    print(latest_release)
 
 
 def get_latest_release() -> str:
@@ -16,6 +20,10 @@ def get_latest_release() -> str:
         return last_tag["ref"].rsplit("/", maxsplit=1)[1]
     except StopIteration:
         raise AssertionError(tags)
+
+
+def write_latest_release(release_version: str) -> None:
+    Path("aws_cli_release").write_text(release_version)
 
 
 if __name__ == "__main__":
