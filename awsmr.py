@@ -14,23 +14,35 @@ from botocore.compat import OrderedDict
 from multiregion import multiregion, response_or_exception
 
 
-def multi_region_invoke(self, service_name, operation_name, parameters, parsed_globals):
-    mr = multiregion(make_regional_client_call, region_names=parsed_globals.region_list)
-    response = mr(self, service_name, operation_name, parameters, parsed_globals)
-    self._display_response(operation_name, response, parsed_globals)
-    return 0
+def main():
+    CLIDriver._get_cli_data = patch_get_cli_data(CLIDriver._get_cli_data)
+    awscli.clidriver.CLIOperationCaller = MultiRegionOperationCaller
+    awscli.clidriver.get_formatter = multi_region_formatter
+    driver = awscli.clidriver.create_clidriver()
+    sys.exit(driver.main())
 
 
-def make_regional_client_call(
-    self, service_name, operation_name, parameters, parsed_globals, *, region_name
-):
-    client = self._session.create_client(
-        service_name,
-        region_name=region_name,
-        endpoint_url=parsed_globals.endpoint_url,
-        verify=parsed_globals.verify_ssl,
-    )
-    return self._make_client_call(client, operation_name, parameters, parsed_globals)
+class MultiRegionOperationCaller(CLIOperationCaller):
+    def invoke(self, service_name, operation_name, parameters, parsed_globals):
+        mr = multiregion(
+            self._make_regional_client_call, region_names=parsed_globals.region_list
+        )
+        response = mr(service_name, operation_name, parameters, parsed_globals)
+        self._display_response(operation_name, response, parsed_globals)
+        return 0
+
+    def _make_regional_client_call(
+        self, service_name, operation_name, parameters, parsed_globals, *, region_name
+    ):
+        client = self._session.create_client(
+            service_name,
+            region_name=region_name,
+            endpoint_url=parsed_globals.endpoint_url,
+            verify=parsed_globals.verify_ssl,
+        )
+        return self._make_client_call(
+            client, operation_name, parameters, parsed_globals
+        )
 
 
 def multi_region_formatter(format_type, args):
@@ -99,14 +111,6 @@ def patch_get_cli_data(original):
         return cli_data
 
     return _get_cli_data
-
-
-def main():
-    CLIDriver._get_cli_data = patch_get_cli_data(CLIDriver._get_cli_data)
-    CLIOperationCaller.invoke = multi_region_invoke
-    awscli.clidriver.get_formatter = multi_region_formatter
-    driver = awscli.clidriver.create_clidriver()
-    sys.exit(driver.main())
 
 
 if __name__ == "__main__":
